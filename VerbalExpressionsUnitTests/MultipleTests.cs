@@ -8,7 +8,7 @@ namespace VerbalExpressionsUnitTests
     public class MultipleTests
     {
         [Test]
-        public void Multiple_WhenNullOrEmptyValueParameterIsPassed_ShouldThrowArgumentException()
+        public void Multiple_WhenNullArgumentPassed_ThrowsArgumentNullException()
         {
             //Arrange
             var verbEx = VerbalExpressions.DefaultExpression;
@@ -37,15 +37,31 @@ namespace VerbalExpressionsUnitTests
         }
 
         [Test]
-        public void Multiple_WhenNullArgumentPassed_ThrowsArgumentNullException()
+        public void Multiple_WhenEmptyStringPassedWithNothingProceeding_ThrowsArgumentException()
         {
             //Arrange
             var verbEx = VerbalExpressions.DefaultExpression;
             string argument = string.Empty;
 
             //Act
+            //verbEx.Add(".", false);
+            verbEx.Multiple(argument);
             //Assert
-            Assert.Throws<ArgumentNullException>(() => verbEx.Multiple(argument));
+            Assert.Throws<ArgumentException>(() => verbEx.ToRegex());
+        }
+
+        [Test]
+        public void Multiple_WhenEmptyStringPassed_AddPlus()
+        {
+            //Arrange
+            var verbEx = VerbalExpressions.DefaultExpression;
+            string argument = string.Empty;
+
+            //Act
+            verbEx.Add(".", false);
+            verbEx.Multiple(argument);
+            //Assert
+            Assert.AreEqual(verbEx.ToString(), ".+");
         }
     }
 }

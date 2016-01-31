@@ -323,6 +323,10 @@ namespace CSharpVerbalExpressions
         {
             if (string.IsNullOrEmpty(value))
             {
+                if (value != null)
+                {
+                    return Add("+", false);
+                }
                 throw new ArgumentNullException("value");
             }
 
