@@ -44,6 +44,9 @@
     <Compile Include="AddModifierTests.cs" />
     <Compile Include="AddTests.cs" />
     <Compile Include="CaptureTests.cs" />
+    <Compile Include="DynamicInvocationMethodCall.cs" />
+    <Compile Include="DynamicInvocationTest.cs" />
+    <Compile Include="DynamicInvocationTests.cs" />
     <Compile Include="RepeatPreviousTest.cs" />
     <Compile Include="EndOfLineTests.cs" />
     <Compile Include="MaybeTests.cs" />
