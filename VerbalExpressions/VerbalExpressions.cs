@@ -257,14 +257,14 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions Range(params object[] arguments)
         {
-            if (object.ReferenceEquals(arguments, null))
+            if (object.ReferenceEquals(arguments, null) || arguments.Length < 1)
             {
-                throw new ArgumentNullException("arguments");
+                throw new ArgumentNullException("No arguments were passed");
             }
 
             if (arguments.Length == 1)
             {
-                throw new ArgumentOutOfRangeException("arguments");
+                throw new ArgumentOutOfRangeException("Two or more arguments must be passed!");
             }
 
             string[] sanitizedStrings = arguments.Select(argument =>
@@ -286,36 +286,34 @@ namespace CSharpVerbalExpressions
             })
                 .Where(sanitizedString =>
                     !string.IsNullOrEmpty(sanitizedString))
-                .OrderBy(s => s)
                 .ToArray();
-
-            if (sanitizedStrings.Length > 3)
-            {
-                throw new ArgumentOutOfRangeException("arguments");
-            }
 
             if (!sanitizedStrings.Any())
             {
                 return this;
             }
 
-            bool hasOddNumberOfParams = (sanitizedStrings.Length % 2) > 0;
-
             StringBuilder sb = new StringBuilder("[");
-            for (int _from = 0; _from < sanitizedStrings.Length; _from += 2)
+            string[][] sanitizedChunks = sanitizedStrings.Select(
+                (value, index) => new { indexChunk = Math.Floor(index / 2), value }
+            ).GroupBy(
+                pair => pair.indexChunk
+            ).Select(
+                chunk => chunk.Select(g => g.value).OrderBy(s => s).ToArray()
+            ).ToArray();
+            foreach (string[] sanitizedChunk in sanitizedChunks)
             {
-                int _to = _from + 1;
-                if (sanitizedStrings.Length <= _to)
+                if (sanitizedChunk.Length == 2)
                 {
-                    break;
+                    sb.Append(sanitizedChunk[0]);
+                    sb.Append("-");
+                    sb.Append(sanitizedChunk[1]);
                 }
-                sb.AppendFormat("{0}-{1}", sanitizedStrings[_from], sanitizedStrings[_to]);
             }
             sb.Append("]");
-
-            if (hasOddNumberOfParams)
+            if (sanitizedChunks.Last().Length == 1)
             {
-                sb.AppendFormat("|{0}", sanitizedStrings.Last());
+                sb.AppendFormat("|{0}", sanitizedChunks.Last()[0]);
             }
 
             return Add(sb.ToString(), false);

@@ -7,16 +7,6 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     public class RangeTests
     {
-        [Test]
-        public void Range_WhenTooManyItemsInArray_ShouldThrowArgumentOutOfRangeException()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            object[] range = new object[4] { 1, 6, 7, 12 };
-
-            //Act
-            //Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => verbEx.Range(range));
-        }
 
         [Test]
         public void Range_WhenOddNumberOfItemsInArray_ShouldAppendLastElementWithOrClause()
@@ -52,11 +42,10 @@ namespace VerbalExpressionsUnitTests
         {
             //Arrange
             var verbEx = VerbalExpressions.DefaultExpression;
-            object[] value = null;
 
             //Act
             //Assert
-            Assert.Throws<ArgumentNullException>(() => verbEx.Range(value));
+            Assert.Throws<ArgumentNullException>(() => verbEx.Range());
         }
 
         [Test]
